@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Safe Publish"
+  short_description: "Inspect and safely publish local projects to GitHub"
+  default_prompt: "Use $github-safe-publish to inspect this local project and safely publish it to the GitHub repository URL I provide."
