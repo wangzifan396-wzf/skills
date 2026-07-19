@@ -167,6 +167,21 @@ class CsdnBundleTests(unittest.TestCase):
             self.assertFalse(report["valid"])
             self.assertTrue(any(item["code"] == "marker-map-count" for item in report["issues"]))
 
+    def test_rule_names_in_prose_and_inline_code_are_not_false_blockers(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            article, config = self.make_fixture(root)
+            output = root / "bundle"
+            package_csdn_draft.build_bundle(article, config, output, root, False)
+            paste_ready = output / "article-csdn.md"
+            text = paste_ready.read_text(encoding="utf-8")
+            text += "\n本文可以讨论发布说明（发布时可删除）的设计，并解释为什么校验器会检查 `TODO`。\n"
+            paste_ready.write_text(text, encoding="utf-8")
+
+            report = validate_csdn_bundle.validate_bundle(output)
+            self.assertTrue(report["valid"])
+            self.assertFalse(any(item["code"] in {"internal-publication-note", "unfinished-placeholder"} for item in report["issues"]))
+
 
 if __name__ == "__main__":
     unittest.main()

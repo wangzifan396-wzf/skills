@@ -19,7 +19,9 @@ REQUIRED_FILES = (
 )
 MARKER_PATTERN = re.compile(r"【配图\s*(\d{2})：请上传\s+([^\s]+)\s+后删除本行】")
 MARKDOWN_IMAGE_PATTERN = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
-PUBLICATION_NOTE_PATTERN = re.compile(r"发布(?:说明|信息)（发布时可删除）")
+PUBLICATION_NOTE_PATTERN = re.compile(
+    r"(?m)^\s*>\s*发布说明（发布时可删除）\s*$|^\s*##\s+发布信息（发布时可删除）\s*$"
+)
 UNFINISHED_PATTERN = re.compile(r"\b(?:TODO|TBD|PLACEHOLDER)\b|待补内容|此处插图", re.IGNORECASE)
 
 
@@ -208,17 +210,18 @@ def validate_bundle(bundle_value: Path | str) -> dict[str, Any]:
     if not balanced:
         issues.append(issue("blocker", "unmatched-code-fence", "Paste-ready article contains an unmatched fenced code block", "article-csdn.md"))
     outside = text_outside_fences(article_text)
-    if PUBLICATION_NOTE_PATTERN.search(outside):
+    outside_no_inline_code = re.sub(r"`[^`\n]*`", "", outside)
+    if PUBLICATION_NOTE_PATTERN.search(outside_no_inline_code):
         issues.append(issue("blocker", "internal-publication-note", "Paste-ready body still contains removable publication notes", "article-csdn.md"))
-    unfinished = sorted(set(match.group(0) for match in UNFINISHED_PATTERN.finditer(outside)))
+    unfinished = sorted(set(match.group(0) for match in UNFINISHED_PATTERN.finditer(outside_no_inline_code)))
     if unfinished:
         issues.append(issue("blocker", "unfinished-placeholder", f"Unfinished markers remain: {', '.join(unfinished)}", "article-csdn.md"))
-    if re.search(r"file://|(?<![\w])(?:[A-Za-z]:[\\/]|/Users/|/home/)", outside, re.IGNORECASE):
+    if re.search(r"file://|(?<![\w])(?:[A-Za-z]:[\\/]|/Users/|/home/)", outside_no_inline_code, re.IGNORECASE):
         issues.append(issue("blocker", "local-absolute-path", "Paste-ready prose contains a local absolute path", "article-csdn.md"))
 
     local_markdown_images = []
     remote_markdown_images = []
-    for match in MARKDOWN_IMAGE_PATTERN.finditer(outside):
+    for match in MARKDOWN_IMAGE_PATTERN.finditer(outside_no_inline_code):
         target = match.group(1).strip().strip("<>").split()[0]
         if re.match(r"https?://", target, re.IGNORECASE):
             remote_markdown_images.append(target)
@@ -229,7 +232,7 @@ def validate_bundle(bundle_value: Path | str) -> dict[str, Any]:
     if remote_markdown_images:
         issues.append(issue("warning", "remote-image", f"Article retains {len(remote_markdown_images)} remote image(s); verify availability and rights", "article-csdn.md"))
 
-    markers = [(int(number), path) for number, path in MARKER_PATTERN.findall(outside)]
+    markers = [(int(number), path) for number, path in MARKER_PATTERN.findall(outside_no_inline_code)]
     marker_numbers = [number for number, _ in markers]
     expected_numbers = list(range(1, len(markers) + 1))
     if marker_numbers != expected_numbers:
