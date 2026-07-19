@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import unquote
 
-from validate_csdn_bundle import image_dimensions, render_report, validate_bundle, write_json
+from validate_csdn_bundle import image_dimensions, render_report, text_outside_fences, validate_bundle, write_json
 
 
 IMAGE_PATTERN = re.compile(r"!\[(?P<alt>[^\]]*)\]\((?P<target>[^)]+)\)")
@@ -82,17 +82,19 @@ def resolve_cover(metadata: Path, project_root: Path | None, cover: str) -> Path
 
 
 def title_from_article(text: str) -> str:
-    titles = re.findall(r"(?m)^#\s+(.+?)\s*$", text)
+    titles = re.findall(r"(?m)^#\s+(.+?)\s*$", text_outside_fences(text))
     if len(titles) != 1:
         raise BundleError(f"Authoring article must contain exactly one H1 title; found {len(titles)}")
     return titles[0].strip()
 
 
 def remove_top_release_note(lines: list[str]) -> list[str]:
-    h1_indexes = [index for index, line in enumerate(lines) if re.match(r"^#\s+", line)]
-    if len(h1_indexes) != 1:
+    index = 0
+    while index < len(lines) and not lines[index].strip():
+        index += 1
+    if index >= len(lines) or not re.match(r"^#\s+", lines[index]):
         return lines
-    index = h1_indexes[0] + 1
+    index += 1
     while index < len(lines) and not lines[index].strip():
         index += 1
     if index >= len(lines) or not lines[index].lstrip().startswith(">"):
@@ -344,7 +346,7 @@ def build_bundle(article_value: Path, metadata_value: Path, output_value: Path, 
     step = 3
     for item in body_images:
         checklist.append(
-            f"{step}. 搜索 `【配图 {item['number']:02d}】`，在该处上传 `{item['packaged']}`，确认预览后删除整行标记。"
+            f"{step}. 搜索完整标记 `{item['marker']}`，在该处上传 `{item['packaged']}`，确认预览后删除整行标记。"
         )
         if item["caption"]:
             checklist.append(f"   - 保留紧随其后的图注：{item['caption']}")

@@ -97,7 +97,7 @@ def fence_balance(text: str) -> tuple[bool, int]:
 
 
 def extract_h1(text: str) -> list[str]:
-    return [match.group(1).strip() for match in re.finditer(r"(?m)^#\s+(.+?)\s*$", text)]
+    return [match.group(1).strip() for match in re.finditer(r"(?m)^#\s+(.+?)\s*$", text_outside_fences(text))]
 
 
 def jpeg_dimensions(data: bytes) -> tuple[int, int] | None:

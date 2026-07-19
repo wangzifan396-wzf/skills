@@ -51,6 +51,8 @@ def article_text() -> str:
 {body}
 
 ```markdown
+# 代码示例里的标题
+
 ![代码示例里的图片语法](missing-in-code.png)
 ```
 
@@ -123,6 +125,8 @@ class CsdnBundleTests(unittest.TestCase):
             self.assertEqual(mapping["bodyImages"][0]["sourceReference"], "images/diagram.png")
             self.assertNotIn(str(root), json.dumps(mapping, ensure_ascii=False))
             self.assertEqual(mapping["bodyImages"][0]["caption"], "流程图展示输入、检查与发布包之间的关系。")
+            checklist = (output / "human-upload-checklist.md").read_text(encoding="utf-8")
+            self.assertIn("搜索完整标记 `【配图 01：请上传 images/01-diagram.png 后删除本行】`", checklist)
 
             report = validate_csdn_bundle.validate_bundle(output)
             self.assertTrue(report["valid"])
