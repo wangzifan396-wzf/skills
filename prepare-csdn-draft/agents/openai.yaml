@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prepare CSDN Draft"
+  short_description: "Create and validate complete CSDN article draft bundles"
+  default_prompt: "Use $prepare-csdn-draft to turn this project into a polished CSDN article draft bundle with image placement instructions."
