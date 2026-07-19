@@ -1,0 +1,15 @@
+{
+  "name": "build-web-promo-video-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.61.1"
+  },
+  "devDependencies": {
+    "ffprobe-static": "3.1.0"
+  }
+}

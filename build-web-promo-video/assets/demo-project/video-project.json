@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "name": "Orbit Console Demo",
+    "root": "."
+  },
+  "capture": {
+    "baseUrl": "",
+    "browserChannel": "",
+    "headless": true,
+    "perProfile": true,
+    "viewport": {
+      "width": 960,
+      "height": 540
+    },
+    "postLoadWaitMs": 250
+  },
+  "scenes": [
+    {
+      "id": "launch",
+      "title": "Launch sequence",
+      "path": "index.html",
+      "duration": 2.5,
+      "actions": [
+        {
+          "at": 0.6,
+          "type": "click",
+          "selector": "#launch"
+        }
+      ]
+    },
+    {
+      "id": "metrics",
+      "title": "Metrics focus",
+      "path": "index.html?mode=metrics",
+      "duration": 2.5,
+      "actions": [
+        {
+          "at": 0.7,
+          "type": "click",
+          "selector": "#metrics"
+        }
+      ]
+    }
+  ],
+  "narration": {
+    "provider": "none",
+    "voice": "zh-CN-YunyangNeural",
+    "rate": "-4%",
+    "pitch": "-4Hz",
+    "volume": 1,
+    "segments": [
+      {
+        "start": 0,
+        "end": 2.5,
+        "text": "A real browser scene enters a deterministic launch state."
+      },
+      {
+        "start": 2.5,
+        "end": 5,
+        "text": "The same timeline also produces a vertical, captioned result."
+      }
+    ]
+  },
+  "subtitles": {
+    "fontName": "Arial",
+    "fontSize": 32,
+    "marginV": 45,
+    "primaryColor": "&H00FFFFFF",
+    "outlineColor": "&H00101018"
+  },
+  "audio": {
+    "mode": "procedural",
+    "file": "",
+    "bpm": 112,
+    "seed": 1831565813,
+    "musicVolume": 0.38,
+    "voiceDuck": true
+  },
+  "render": {
+    "fps": 30,
+    "crf": 24,
+    "preset": "veryfast",
+    "clean": true,
+    "captioned": true,
+    "profiles": [
+      {
+        "id": "landscape",
+        "width": 1280,
+        "height": 720,
+        "fit": "contain"
+      },
+      {
+        "id": "vertical",
+        "width": 720,
+        "height": 1280,
+        "fit": "contain"
+      }
+    ]
+  },
+  "output": {
+    "directory": "./promo-output"
+  }
+}

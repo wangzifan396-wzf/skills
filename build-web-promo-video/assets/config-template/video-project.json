@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "project": {
+    "name": "Example Web Project",
+    "root": "./web-root"
+  },
+  "capture": {
+    "baseUrl": "",
+    "browserChannel": "",
+    "headless": true,
+    "perProfile": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "postLoadWaitMs": 500
+  },
+  "scenes": [
+    {
+      "id": "overview",
+      "title": "Project overview",
+      "path": "index.html",
+      "duration": 4,
+      "actions": []
+    }
+  ],
+  "narration": {
+    "provider": "none",
+    "voice": "zh-CN-YunyangNeural",
+    "rate": "-4%",
+    "pitch": "-4Hz",
+    "volume": 1,
+    "segments": [
+      {
+        "start": 0,
+        "end": 4,
+        "text": "Use one short, verified sentence to explain this scene."
+      }
+    ]
+  },
+  "subtitles": {
+    "fontName": "Arial",
+    "fontSize": 42,
+    "marginV": 70,
+    "primaryColor": "&H00FFFFFF",
+    "outlineColor": "&H00101018"
+  },
+  "audio": {
+    "mode": "procedural",
+    "file": "",
+    "bpm": 116,
+    "seed": 1831565813,
+    "musicVolume": 0.42,
+    "voiceDuck": true
+  },
+  "render": {
+    "fps": 30,
+    "crf": 22,
+    "preset": "medium",
+    "clean": true,
+    "captioned": true,
+    "profiles": [
+      {
+        "id": "landscape",
+        "width": 1920,
+        "height": 1080,
+        "fit": "contain"
+      },
+      {
+        "id": "vertical",
+        "width": 1080,
+        "height": 1920,
+        "fit": "contain"
+      }
+    ]
+  },
+  "output": {
+    "directory": "./promo-video-bundle"
+  }
+}

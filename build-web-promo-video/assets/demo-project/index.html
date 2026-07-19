@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Orbit Console Demo</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; overflow: hidden; color: #eef8ff; background: #06101c; }
+    body::before { content: ""; position: fixed; inset: 0; opacity: .28; background-image: linear-gradient(#4fdce322 1px, transparent 1px), linear-gradient(90deg,#4fdce322 1px,transparent 1px); background-size: 48px 48px; }
+    main { position: relative; min-height: 100vh; padding: clamp(24px,5vw,72px); display: grid; grid-template-columns: 1.15fr .85fr; gap: 36px; align-items: center; }
+    .eyebrow { color: #55dce3; letter-spacing: .18em; font-weight: 800; font-size: 13px; }
+    h1 { margin: 16px 0; font-size: clamp(46px,7vw,92px); line-height: .95; }
+    h1 span { color: #55dce3; }
+    p { max-width: 650px; color: #a9bdcb; font-size: clamp(17px,2vw,24px); line-height: 1.55; }
+    .actions { display: flex; gap: 14px; margin-top: 28px; }
+    button { border: 1px solid #55dce3; border-radius: 999px; padding: 13px 22px; color: #07111c; background: #55dce3; font: inherit; font-weight: 800; cursor: pointer; }
+    button.secondary { color: #b985ff; border-color: #b985ff; background: transparent; }
+    .panel { min-height: 390px; padding: 28px; border: 2px solid #4f97ff; border-radius: 28px; background: #0d1a2bee; box-shadow: 0 0 70px #4f97ff24; }
+    .orbit { position: relative; width: 230px; aspect-ratio: 1; margin: 0 auto 22px; border: 1px solid #55dce366; border-radius: 50%; animation: spin 7s linear infinite; }
+    .orbit::before,.orbit::after { content:""; position:absolute; border-radius:50%; }
+    .orbit::before { inset: 42px; border: 2px solid #b985ff; }
+    .orbit::after { width: 24px; height: 24px; top: 20px; left: 24px; background:#ffae48; box-shadow: 0 0 24px #ffae48; }
+    .core { position:absolute; inset: 87px; border-radius:50%; background:#55dce3; box-shadow:0 0 34px #55dce3; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .stat { padding:16px; border-radius:16px; background:#071321; text-align:center; }
+    .stat strong { display:block; color:#55dce3; font-size:26px; }
+    .status { margin-top:18px; padding:14px 18px; border-radius:14px; color:#9eb2c0; background:#071321; }
+    .launched .panel { border-color:#55e098; box-shadow:0 0 80px #55e09830; }
+    .launched .status { color:#55e098; }
+    .metrics .stat { outline:1px solid #b985ff; transform:translateY(-4px); transition:.4s; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @media (max-aspect-ratio: 4/5) { main { grid-template-columns:1fr; align-content:center; } .copy { text-align:center; } p { margin-inline:auto; } .actions { justify-content:center; } .panel { min-height:340px; } .orbit { width:190px; } .core { inset:72px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="copy">
+      <div class="eyebrow">DETERMINISTIC WEB FIXTURE</div>
+      <h1>Orbit <span>Console</span></h1>
+      <p>A lightweight project-owned page used to verify browser capture, interaction timing, subtitles, audio, landscape and vertical rendering.</p>
+      <div class="actions">
+        <button id="launch">Launch sequence</button>
+        <button id="metrics" class="secondary">Focus metrics</button>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="orbit"><div class="core"></div></div>
+      <div class="stats">
+        <div class="stat"><strong id="nodes">24</strong>nodes</div>
+        <div class="stat"><strong id="latency">18</strong>ms</div>
+        <div class="stat"><strong id="health">99</strong>health</div>
+      </div>
+      <div class="status" id="status">System ready · awaiting launch</div>
+    </section>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    if (params.get("mode") === "metrics") document.body.classList.add("metrics");
+    document.querySelector("#launch").addEventListener("click", () => {
+      document.body.classList.add("launched");
+      document.querySelector("#status").textContent = "Sequence active · all checks nominal";
+      document.querySelector("#nodes").textContent = "36";
+    });
+    document.querySelector("#metrics").addEventListener("click", () => {
+      document.body.classList.add("metrics");
+      document.querySelector("#status").textContent = "Metrics pinned · deterministic state";
+      document.querySelector("#latency").textContent = "12";
+    });
+  </script>
+</body>
+</html>

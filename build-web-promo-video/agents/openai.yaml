@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Web Promo Video"
+  short_description: "Capture, render, and validate complete web project promo videos"
+  default_prompt: "Use $build-web-promo-video to create a complete landscape and vertical promotional video bundle for this web project."
