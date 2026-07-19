@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Project Publisher"
+  short_description: "Publish repositories, releases, and verified assets safely"
+  default_prompt: "Use $github-project-publisher to inspect, package, publish, tag, and verify this project on GitHub."
